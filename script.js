@@ -94,24 +94,17 @@ function showStats() {
     return;
   }
 
+  // Hide the input and button after selection
   document.getElementById("input-container").style.display = "none";
 
   const birthDate = new Date(bdayInput);
   const today = new Date();
 
-  // Calculate age values
-  updateAgeValues(birthDate, today);
-
-  const leapYears = countLeapYears(birthDate, today);
-  const weekendsLived = Math.floor(ageInDays / 7 * 2);
-
-  updateStats(leapYears, weekendsLived);
-  updateCountdown(birthDate, today);
-  
-  // Update stats every second
+  // Start updating stats and countdown every second
   statsInterval = setInterval(function() {
-    updateAgeValues(birthDate, new Date());  // Update age values in real-time
-    updateStats(leapYears, weekendsLived);
+    updateAgeValues(birthDate, new Date());
+    updateStats();
+    updateCountdown(birthDate, new Date());
   }, 1000);
 }
 
@@ -121,11 +114,14 @@ function updateAgeValues(birthDate, today) {
   ageInMinutes = ageInSeconds / 60;
   ageInHours = ageInMinutes / 60;
   ageInDays = ageInHours / 24;
-  ageInMonths = ageInDays / 30.4375;
-  ageInYears = ageInDays / 365.25;
+  ageInMonths = ageInDays / 30.4375; // Average days in a month
+  ageInYears = ageInDays / 365.25; // Average days in a year
 }
 
-function updateStats(leapYears, weekendsLived) {
+function updateStats() {
+  const leapYears = countLeapYears(new Date(birthday), new Date());
+  const weekendsLived = Math.floor(ageInDays / 7 * 2); // Approximation for weekends
+
   document.getElementById("stats").innerHTML = `
     <p><strong>${translations[currentLanguage].age}:</strong> ${Math.floor(ageInYears)} years</p>
     <p><strong>${translations[currentLanguage].monthsLived}:</strong> ${Math.floor(ageInMonths)} months</p>
@@ -164,7 +160,8 @@ function getNextBirthday(birthDate, today) {
 }
 
 function updateCountdown(birthDate, today) {
-  clearInterval(countdownInterval);
+  clearInterval(countdownInterval); // Clear any previous countdown
+
   countdownInterval = setInterval(() => {
     const nextBirthday = getNextBirthday(birthDate, today);
     const timeDiff = nextBirthday - today;

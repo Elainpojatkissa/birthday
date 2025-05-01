@@ -1,177 +1,181 @@
-let countdownInterval;
-let statsInterval;
-let ageInSeconds, ageInMinutes, ageInHours, ageInDays, ageInMonths, ageInYears;
-
-const translations = {
-  en: {
-    title: "🎉 Birthday Stats & Countdown 🎉",
-    birthdayLabel: "Select your birthday:",
-    showStatsButton: "Show My Stats",
-    selectLanguage: "Select language:",
-    age: "Age",
-    monthsLived: "Months lived",
-    weeksLived: "Weeks lived",
-    daysLived: "Days lived",
-    hoursLived: "Hours lived",
-    minutesLived: "Minutes lived",
-    secondsLived: "Seconds lived",
-    leapYears: "Leap years",
-    birthdaysCelebrated: "Birthdays celebrated",
-    weekendsLived: "Total number of weekends lived",
-    timeToNextBirthday: "Time until next birthday:"
-  },
-  fi: {
-    title: "🎉 Syntymäpäivätilastot ja laskuri 🎉",
-    birthdayLabel: "Valitse syntymäpäiväsi:",
-    showStatsButton: "Näytä tilastoni",
-    selectLanguage: "Valitse kieli:",
-    age: "Ikä",
-    monthsLived: "Kuukaudet eletty",
-    weeksLived: "Viikot eletty",
-    daysLived: "Päivät eletty",
-    hoursLived: "Tunnit eletty",
-    minutesLived: "Minuutit eletty",
-    secondsLived: "Sekunnit eletty",
-    leapYears: "Karkausvuodet",
-    birthdaysCelebrated: "Vietetyt syntymäpäivät",
-    weekendsLived: "Vietetyt viikonloput",
-    timeToNextBirthday: "Aikaa seuraavaan syntymäpäivään:"
-  },
-  es: {
-    title: "🎉 Estadísticas de Cumpleaños y Cuenta Atrás 🎉",
-    birthdayLabel: "Selecciona tu cumpleaños:",
-    showStatsButton: "Ver mis estadísticas",
-    selectLanguage: "Seleccionar idioma:",
-    age: "Edad",
-    monthsLived: "Meses vividos",
-    weeksLived: "Semanas vividas",
-    daysLived: "Días vividos",
-    hoursLived: "Horas vividas",
-    minutesLived: "Minutos vividos",
-    secondsLived: "Segundos vividos",
-    leapYears: "Años bisiestos",
-    birthdaysCelebrated: "Cumpleaños celebrados",
-    weekendsLived: "Fines de semana vividos",
-    timeToNextBirthday: "Tiempo hasta el próximo cumpleaños:"
-  },
-  sv: {
-    title: "🎉 Födelsedagsstatistik och Nedräkning 🎉",
-    birthdayLabel: "Välj din födelsedag:",
-    showStatsButton: "Visa mina statistik",
-    selectLanguage: "Välj språk:",
-    age: "Ålder",
-    monthsLived: "Månader levda",
-    weeksLived: "Veckor levda",
-    daysLived: "Dagar levda",
-    hoursLived: "Timmar levda",
-    minutesLived: "Minuter levda",
-    secondsLived: "Sekunder levda",
-    leapYears: "Skottår",
-    birthdaysCelebrated: "Firade födelsedagar",
-    weekendsLived: "Helger levda",
-    timeToNextBirthday: "Tid tills nästa födelsedag:"
-  }
-};
-
-let currentLanguage = "en";
-
-function changeLanguage() {
-  currentLanguage = document.getElementById("language-select").value;
-  updateText();
-}
-
-function updateText() {
-  document.getElementById("page-title").innerText = translations[currentLanguage].title;
-  document.getElementById("birthday-label").innerText = translations[currentLanguage].birthdayLabel;
-  document.getElementById("show-stats-button").innerText = translations[currentLanguage].showStatsButton;
-  document.getElementById("language-label").innerText = translations[currentLanguage].selectLanguage;
-}
-
-function showStats() {
-  const bdayInput = document.getElementById("birthday").value;
-  if (!bdayInput) {
-    alert("Please select your birthday!");
-    return;
-  }
-
-  // Hide the input and button after selection
-  document.getElementById("input-container").style.display = "none";
-
-  const birthDate = new Date(bdayInput);
-  const today = new Date();
-
-  // Start updating stats and countdown every second
-  statsInterval = setInterval(function() {
-    updateAgeValues(birthDate, new Date());
-    updateStats();
-    updateCountdown(birthDate, new Date());
-  }, 1000);
-}
-
-function updateAgeValues(birthDate, today) {
-  const ageInMilliseconds = today - birthDate;
-  ageInSeconds = ageInMilliseconds / 1000;
-  ageInMinutes = ageInSeconds / 60;
-  ageInHours = ageInMinutes / 60;
-  ageInDays = ageInHours / 24;
-  ageInMonths = ageInDays / 30.4375; // Average days in a month
-  ageInYears = ageInDays / 365.25; // Average days in a year
-}
-
-function updateStats() {
-  const leapYears = countLeapYears(new Date(birthday), new Date());
-  const weekendsLived = Math.floor(ageInDays / 7 * 2); // Approximation for weekends
-
-  document.getElementById("stats").innerHTML = `
-    <p><strong>${translations[currentLanguage].age}:</strong> ${Math.floor(ageInYears)} years</p>
-    <p><strong>${translations[currentLanguage].monthsLived}:</strong> ${Math.floor(ageInMonths)} months</p>
-    <p><strong>${translations[currentLanguage].weeksLived}:</strong> ${Math.floor(ageInDays / 7)} weeks</p>
-    <p><strong>${translations[currentLanguage].daysLived}:</strong> ${Math.floor(ageInDays)} days</p>
-    <p><strong>${translations[currentLanguage].hoursLived}:</strong> ${Math.floor(ageInHours)} hours</p>
-    <p><strong>${translations[currentLanguage].minutesLived}:</strong> ${Math.floor(ageInMinutes)} minutes</p>
-    <p><strong>${translations[currentLanguage].secondsLived}:</strong> ${Math.floor(ageInSeconds)} seconds</p>
-    <p><strong>${translations[currentLanguage].leapYears}:</strong> ${leapYears}</p>
-    <p><strong>${translations[currentLanguage].birthdaysCelebrated}:</strong> ${Math.floor(ageInYears)}</p>
-    <p><strong>${translations[currentLanguage].weekendsLived}:</strong> ${weekendsLived}</p>
-  `;
-}
-
-function countLeapYears(startDate, endDate) {
-  let leapYears = 0;
-  for (let year = startDate.getFullYear(); year <= endDate.getFullYear(); year++) {
-    if (isLeapYear(year)) {
-      leapYears++;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Birthday Stats & Countdown</title>
+  <style>
+    /* Add your styles here */
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #d0f0ff, #a0e0ff);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px;
+      min-height: 100vh;
     }
+
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      max-width: 800px;
+      width: 100%;
+      text-align: center;
+    }
+
+    h1 {
+      color: #0077b6;
+      margin-bottom: 20px;
+    }
+
+    input[type="date"], select {
+      font-size: 16px;
+      padding: 10px;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    .stats, #countdown {
+      font-size: 18px;
+      line-height: 1.6;
+      color: #023e8a;
+      margin-top: 20px;
+    }
+
+    .label {
+      font-weight: bold;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #0077b6;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #005f8f;
+    }
+
+    #countdown {
+      font-size: 36px;
+      font-weight: bold;
+      color: #ff6f61;
+      margin-top: 30px;
+    }
+
+    .language-selector {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>🎉 Birthday Stats & Countdown 🎉</h1>
+
+  <div id="input-container">
+    <label for="birthday" id="birthday-label">Select your birthday:</label>
+    <input type="date" id="birthday" max="9999-12-31">
+    <button onclick="showStats()" id="show-stats-button">Show My Stats</button>
+  </div>
+
+  <div class="stats" id="stats"></div>
+  <div id="countdown"></div>
+</div>
+
+<script>
+  let countdownInterval;
+
+  function showStats() {
+    const bdayInput = document.getElementById("birthday").value;
+    if (!bdayInput) {
+      alert("Please select your birthday!");
+      return;
+    }
+
+    document.getElementById("input-container").style.display = "none";
+
+    const birthDate = new Date(bdayInput);
+    const today = new Date();
+
+    const ageInMilliseconds = today - birthDate;
+    const ageInSeconds = ageInMilliseconds / 1000;
+    const ageInMinutes = ageInSeconds / 60;
+    const ageInHours = ageInMinutes / 60;
+    const ageInDays = ageInHours / 24;
+    const ageInMonths = ageInDays / 30.4375; // Average days in a month
+    const ageInYears = ageInDays / 365.25; // Average days in a year
+
+    const leapYears = countLeapYears(birthDate, today);
+    const weekendsLived = Math.floor(ageInDays / 7 * 2); // Approximation for weekends
+
+    updateStats(ageInYears, ageInMonths, ageInDays, ageInHours, ageInMinutes, ageInSeconds, leapYears, weekendsLived);
+    startCountdown(birthDate, today);
   }
-  return leapYears;
-}
 
-function isLeapYear(year) {
-  return (year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0));
-}
-
-function getNextBirthday(birthDate, today) {
-  let nextBirthday = new Date(birthDate);
-  nextBirthday.setFullYear(today.getFullYear());
-  if (nextBirthday <= today) {
-    nextBirthday.setFullYear(today.getFullYear() + 1);
-  }
-  return nextBirthday;
-}
-
-function updateCountdown(birthDate, today) {
-  clearInterval(countdownInterval); // Clear any previous countdown
-
-  countdownInterval = setInterval(() => {
-    const nextBirthday = getNextBirthday(birthDate, today);
-    const timeDiff = nextBirthday - today;
-    const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
-
-    document.getElementById("countdown").innerText = `
-      ${translations[currentLanguage].timeToNextBirthday} ${days}d ${hours}h ${minutes}m ${seconds}s
+  function updateStats(ageInYears, ageInMonths, ageInDays, ageInHours, ageInMinutes, ageInSeconds, leapYears, weekendsLived) {
+    document.getElementById("stats").innerHTML = `
+      <p><strong>Age:</strong> ${Math.floor(ageInYears)} years</p>
+      <p><strong>Months lived:</strong> ${Math.floor(ageInMonths)} months</p>
+      <p><strong>Weeks lived:</strong> ${Math.floor(ageInDays / 7)} weeks</p>
+      <p><strong>Days lived:</strong> ${Math.floor(ageInDays)} days</p>
+      <p><strong>Hours lived:</strong> ${Math.floor(ageInHours)} hours</p>
+      <p><strong>Minutes lived:</strong> ${Math.floor(ageInMinutes)} minutes</p>
+      <p><strong>Seconds lived:</strong> ${Math.floor(ageInSeconds)} seconds</p>
+      <p><strong>Leap years:</strong> ${leapYears}</p>
+      <p><strong>Birthdays celebrated:</strong> ${Math.floor(ageInYears)}</p>
+      <p><strong>Weekends lived:</strong> ${weekendsLived}</p>
     `;
-  }, 1000);
-}
+  }
+
+  function countLeapYears(startDate, endDate) {
+    let leapYears = 0;
+    for (let year = startDate.getFullYear(); year <= endDate.getFullYear(); year++) {
+      if (isLeapYear(year)) {
+        leapYears++;
+      }
+    }
+    return leapYears;
+  }
+
+  function isLeapYear(year) {
+    return (year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0));
+  }
+
+  function getNextBirthday(birthDate, today) {
+    let nextBirthday = new Date(birthDate);
+    nextBirthday.setFullYear(today.getFullYear());
+    if (nextBirthday <= today) {
+      nextBirthday.setFullYear(today.getFullYear() + 1);
+    }
+    return nextBirthday;
+  }
+
+  function startCountdown(birthDate, today) {
+    clearInterval(countdownInterval); // Clear any existing countdown intervals
+
+    countdownInterval = setInterval(() => {
+      const nextBirthday = getNextBirthday(birthDate, today);
+      const timeDiff = nextBirthday - today;
+      const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+
+      document.getElementById("countdown").innerText = `
+        Time until next birthday: ${days}d ${hours}h ${minutes}m ${seconds}s
+      `;
+    }, 1000); // Update every second
+  }
+</script>
+
+</body>
+</html>

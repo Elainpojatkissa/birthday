@@ -1,57 +1,86 @@
-// Get the user's birthdate
-const birthDate = new Date(); // Change this to your birthday date
+const countdownEl = document.getElementById("countdown");
+const birthdayInput = document.getElementById("birthday");
+const saveBtn = document.getElementById("saveBtn");
+const resetBtn = document.getElementById("resetBtn");
+const colorPicker = document.getElementById("colorPicker");
+const languageSelector = document.getElementById("language");
+const birthdaySound = document.getElementById("birthdaySound");
 
-// Set the countdown interval
-let countdownInterval;
-
-// Function to get the next birthday date based on today's date
-function getNextBirthday(birthDate, today) {
-  const nextBirthday = new Date(birthDate);
-  nextBirthday.setFullYear(today.getFullYear());
-  
-  if (today > nextBirthday) {
-    nextBirthday.setFullYear(today.getFullYear() + 1);
-  }
-  
-  return nextBirthday;
+function getHelsinkiTime() {
+  const now = new Date();
+  const helsinkiTime = new Date(now.toLocaleString("en-US", { timeZone: "Europe/Helsinki" }));
+  return helsinkiTime;
 }
 
-// Function to update the countdown every second
+function getNextBirthday(birthDate) {
+  const today = getHelsinkiTime();
+  const next = new Date(birthDate);
+  next.setFullYear(today.getFullYear());
+  if (today > next) next.setFullYear(today.getFullYear() + 1);
+  return next;
+}
+
 function updateCountdown() {
-  const today = new Date();
-  const nextBirthday = getNextBirthday(birthDate, today);
-  const timeDiff = nextBirthday - today;
-  
-  const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-  const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+  const birthDate = new Date(localStorage.getItem("birthday"));
+  const nextBirthday = getNextBirthday(birthDate);
+  const now = getHelsinkiTime();
+  const diff = nextBirthday - now;
 
-  document.getElementById("countdown").innerText = `Time Until Your Birthday: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((diff / (1000 * 60)) % 60);
+  const seconds = Math.floor((diff / 1000) % 60);
+
+  let label = {
+    en: "Time Until Your Birthday",
+    fi: "Aikaa syntymäpäivääsi",
+    sv: "Tid kvar till din födelsedag",
+    es: "Tiempo hasta tu cumpleaños"
+  }[localStorage.getItem("language") || "en"];
+
+  countdownEl.innerText = `${label} ${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+  if (diff <= 0) {
+    launchConfetti();
+    birthdaySound.play();
+    clearInterval(window.intervalId);
+  }
 }
 
-// Set the countdown to update every second
-countdownInterval = setInterval(updateCountdown, 1000);
-
-// Ensure the countdown updates immediately when the page loads
-updateCountdown();
-
-// Handle share button functionality
-document.getElementById("shareButton").addEventListener("click", function() {
-  if (navigator.share) {
-    navigator.share({
-      title: 'Birthday Countdown',
-      text: 'Check out my birthday countdown!',
-      url: window.location.href,
-    })
-    .then(() => console.log('Shared successfully'))
-    .catch((err) => console.error('Share failed:', err));
-  } else {
-    alert('Share functionality is not supported on this device.');
+function launchConfetti() {
+  if (typeof confetti === 'function') {
+    confetti({ particleCount: 500, spread: 160 });
   }
+}
+
+function saveBirthday() {
+  const birthday = birthdayInput.value;
+  const language = languageSelector.value;
+  localStorage.setItem("birthday", birthday);
+  localStorage.setItem("language", language);
+  localStorage.setItem("color", colorPicker.value);
+  document.body.style.backgroundColor = colorPicker.value;
+  document.getElementById("settings").style.display = "none";
+  resetBtn.style.display = "inline-block";
+  updateCountdown();
+  window.intervalId = setInterval(updateCountdown, 1000);
+}
+
+function resetBirthday() {
+  localStorage.clear();
+  location.reload();
+}
+
+saveBtn.addEventListener("click", saveBirthday);
+resetBtn.addEventListener("click", resetBirthday);
+
+colorPicker.addEventListener("input", (e) => {
+  document.body.style.backgroundColor = e.target.value;
 });
 
-// Color Picker functionality to change background color
-document.getElementById("colorPicker").addEventListener("input", function(event) {
-  document.body.style.backgroundColor = event.target.value;
-});
+if (localStorage.getItem("birthday")) {
+  document.getElementById("settings").style.display = "none";
+  resetBtn.style.display = "inline-block";
+  document.body.style.backgroundColor = colorPicker.value = localStorage.getItem("color") || "#ADD8E6";
+  window.intervalId = setInterval(updateCountdown, 1000);
+}

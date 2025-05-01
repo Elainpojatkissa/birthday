@@ -1,23 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Birthday Countdown</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="countdown-container">
-    <h1 id="countdown-heading">Time Until Your Birthday</h1>
-    <div id="countdown"></div>
-    
-    <!-- Color Picker -->
-    <label for="colorPicker">Choose Background Color: </label>
-    <input type="color" id="colorPicker" name="colorPicker" value="#ADD8E6">
-    
-    <button id="shareButton">Share Your Birthday</button>
+  <div id="settings">
+    <label for="language">🌐 Language:</label>
+    <select id="language">
+      <option value="en">English</option>
+      <option value="fi">Finnish</option>
+      <option value="sv">Swedish</option>
+      <option value="es">Spanish</option>
+    </select><br />
+    <label for="birthday">🎂 Enter your birthday:</label>
+    <input type="date" id="birthday" /><br />
+    <label for="colorPicker">🎨 Pick a color:</label>
+    <input type="color" id="colorPicker" value="#ADD8E6" /><br />
+    <button id="saveBtn">Show Time</button>
   </div>
-  
+
+  <h1 id="countdown"></h1>
+  <button id="resetBtn" style="display:none">Reset Birthday</button>
+
+  <audio id="birthdaySound" src="birthday.mp3" preload="auto"></audio>
+  <canvas id="confetti-canvas"></canvas>
+
   <script src="script.js"></script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 // Get the user's birthdate
-const birthDate = new Date("2025-05-10"); // Change this to your birthday date
+const birthDate = new Date(); // Change this to your birthday date
 
 // Set the countdown interval
 let countdownInterval;

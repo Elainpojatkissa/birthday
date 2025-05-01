@@ -1,32 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🎉 Birthday Stats & Countdown 🎉</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Birthday Stats & Countdown</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <div class="language-selector">
-      <label for="language-select" id="language-label">Select language:</label>
-      <select id="language-select" onchange="changeLanguage()">
-        <option value="en">English</option>
-        <option value="fi">Finnish (Suomi)</option>
-        <option value="es">Español</option>
-        <option value="sv">Svenska</option>
-      </select>
-    </div>
-    <h1 id="page-title">🎉 Birthday Stats & Countdown 🎉</h1>
-    <div id="input-container">
-      <label for="birthday" id="birthday-label">Select your birthday:</label>
-      <input type="date" id="birthday" max="9999-12-31">
-      <button onclick="showStats()" id="show-stats-button">Show My Stats</button>
-    </div>
-    <div class="stats" id="stats"></div>
-    <div id="countdown"></div>
+
+<div class="container">
+  <h1>🎉 Birthday Stats & Countdown 🎉</h1>
+
+  <div id="input-container">
+    <label for="birthday" id="birthday-label">Select your birthday:</label>
+    <input type="date" id="birthday" max="9999-12-31">
+    <button onclick="showStats()" id="show-stats-button">Show My Stats</button>
   </div>
 
-  <script src="script.js"></script>
+  <div class="stats" id="stats"></div>
+
+  <!-- Added a header for the countdown -->
+  <div class="countdown-header" id="countdown-header">Time until your birthday:</div>
+  <div id="countdown"></div>
+</div>
+
+<script src="script.js"></script>
+
 </body>
 </html>

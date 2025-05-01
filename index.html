@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Birthday Stats & Countdown</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="language-selector">
+      <label for="language-select" id="language-label">Select language:</label>
+      <select id="language-select" onchange="changeLanguage()">
+        <option value="en">English</option>
+        <option value="fi">Finnish (Suomi)</option>
+        <option value="es">Spanish (España)</option>
+        <!-- more options... -->
+      </select>
+    </div>
+    <h1 id="page-title">🎉 Birthday Stats & Countdown 🎉</h1>
+    <div id="input-container">
+      <label for="birthday" id="birthday-label">Select your birthday:</label>
+      <input type="date" id="birthday" max="9999-12-31">
+      <button onclick="showStats()" id="show-stats-button">Show My Stats</button>
+    </div>
+    <div class="stats" id="stats"></div>
+    <div id="countdown"></div>
+  </div>
+  <script src="translations.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

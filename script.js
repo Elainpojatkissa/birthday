@@ -24,7 +24,7 @@ function showStats() {
   const weekendsLived = Math.floor(ageInDays / 7 * 2); // Approximation for weekends
 
   updateStats(ageInYears, ageInMonths, ageInDays, ageInHours, ageInMinutes, ageInSeconds, leapYears, weekendsLived);
-  startCountdown(birthDate, today);
+  startCountdown(birthDate);
 }
 
 function updateStats(ageInYears, ageInMonths, ageInDays, ageInHours, ageInMinutes, ageInSeconds, leapYears, weekendsLived) {
@@ -65,19 +65,22 @@ function getNextBirthday(birthDate, today) {
   return nextBirthday;
 }
 
-function startCountdown(birthDate, today) {
-  clearInterval(countdownInterval); // Clear any existing countdown intervals
+function startCountdown(birthDate) {
+  clearInterval(countdownInterval);
 
   countdownInterval = setInterval(() => {
-    const nextBirthday = getNextBirthday(birthDate, today);
-    const timeDiff = nextBirthday - today;
+    const now = new Date(); // Refresh current time every second
+    const nextBirthday = getNextBirthday(birthDate, now);
+    const timeDiff = nextBirthday - now;
+
     const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
     const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
 
-    document.getElementById("countdown").innerText = `
-      ${days}d ${hours}h ${minutes}m ${seconds}s
-    `;
-  }, 1000); // Update every second
+    document.getElementById("countdown").innerText = 
+      `Time until your birthday ${days}d ${hours}h ${minutes}m ${seconds}s`;
+  }, 1000);
+
+
 }

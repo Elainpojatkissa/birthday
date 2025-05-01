@@ -1,171 +1,176 @@
-// Translation object for all supported languages
+let countdownInterval;
+
 const translations = {
-    en: {
-        headerText: "🎉 Birthday Stats & Countdown 🎉",
-        selectBirthdayLabel: "Select your birthday:",
-        showStatsBtn: "Show Stats",
-        timeUntilBirthdayText: "Time until your birthday:",
-        happyBirthdayMessage: "🎉 Happy Birthday! 🎉<br> Wishing you an amazing year ahead, ",
-        thisDayInHistory: "This Day in History",
-        birthdayQuiz: "Birthday Quiz",
-        zodiacInfo: "Your Zodiac Sign: ",
-        shareButton: "Share Your Birthday Stats"
-    },
-    es: {
-        headerText: "🎉 Estadísticas de Cumpleaños y Cuenta Atrás 🎉",
-        selectBirthdayLabel: "Selecciona tu cumpleaños:",
-        showStatsBtn: "Mostrar Estadísticas",
-        timeUntilBirthdayText: "Tiempo hasta tu cumpleaños:",
-        happyBirthdayMessage: "🎉 ¡Feliz Cumpleaños! 🎉<br> Te deseo un año increíble por delante, ",
-        thisDayInHistory: "Este Día en la Historia",
-        birthdayQuiz: "Quiz de Cumpleaños",
-        zodiacInfo: "Tu Signo Zodiacal: ",
-        shareButton: "Comparte tus Estadísticas de Cumpleaños"
-    },
-    sv: {
-        headerText: "🎉 Födelsedagsstatistik & Nedräkning 🎉",
-        selectBirthdayLabel: "Välj din födelsedag:",
-        showStatsBtn: "Visa Statistik",
-        timeUntilBirthdayText: "Tid kvar tills din födelsedag:",
-        happyBirthdayMessage: "🎉 Grattis på födelsedagen! 🎉<br> Jag önskar dig ett fantastiskt år framöver, ",
-        thisDayInHistory: "Denna Dag i Historien",
-        birthdayQuiz: "Födelsedagsquiz",
-        zodiacInfo: "Ditt Stjärntecken: ",
-        shareButton: "Dela dina Födelsedagsstatistik"
-    },
-    fi: {
-        headerText: "🎉 Syntymäpäivätilastot & Laskenta 🎉",
-        selectBirthdayLabel: "Valitse syntymäpäiväsi:",
-        showStatsBtn: "Näytä tilastot",
-        timeUntilBirthdayText: "Aika syntymäpäivääsi:",
-        happyBirthdayMessage: "🎉 Hyvää syntymäpäivää! 🎉<br> Toivotan sinulle upeaa vuotta eteenpäin, ",
-        thisDayInHistory: "Tänä päivänä historiassa",
-        birthdayQuiz: "Syntymäpäiväkysely",
-        zodiacInfo: "Horoskooppimerkki: ",
-        shareButton: "Jaa syntymäpäivätilastosi"
-    }
+  en: {
+    title: "🎉 Birthday Stats & Countdown 🎉",
+    birthdayLabel: "Select your birthday:",
+    showStatsButton: "Show My Stats",
+    timeUntilNextBirthday: "Time until your birthday: ",
+    age: "Age",
+    monthsLived: "Months lived",
+    weeksLived: "Weeks lived",
+    daysLived: "Days lived",
+    hoursLived: "Hours lived",
+    minutesLived: "Minutes lived",
+    secondsLived: "Seconds lived",
+    leapYears: "Leap years",
+    birthdaysCelebrated: "Birthdays celebrated",
+    weekendsLived: "Weekends lived",
+  },
+  fi: {
+    title: "🎉 Syntymäpäivätilastot & Laskuri 🎉",
+    birthdayLabel: "Valitse syntymäpäiväsi:",
+    showStatsButton: "Näytä tilastot",
+    timeUntilNextBirthday: "Aikaa seuraavaan syntymäpäivääsi: ",
+    age: "Ikä",
+    monthsLived: "Kuukaudet elossa",
+    weeksLived: "Viikot elossa",
+    daysLived: "Päivät elossa",
+    hoursLived: "Tunnit elossa",
+    minutesLived: "Minuutit elossa",
+    secondsLived: "Sekunnit elossa",
+    leapYears: "Karkausvuodet",
+    birthdaysCelebrated: "Vietetyt syntymäpäivät",
+    weekendsLived: "Viettämiä viikonloppuja",
+  },
+  sv: {
+    title: "🎉 Födelsedagsstatistik & Nedräkning 🎉",
+    birthdayLabel: "Välj din födelsedag:",
+    showStatsButton: "Visa mina statistik",
+    timeUntilNextBirthday: "Tid kvar till din födelsedag: ",
+    age: "Ålder",
+    monthsLived: "Månader levt",
+    weeksLived: "Veckor levt",
+    daysLived: "Dagar levt",
+    hoursLived: "Timmar levt",
+    minutesLived: "Minuter levt",
+    secondsLived: "Sekunder levt",
+    leapYears: "Skottår",
+    birthdaysCelebrated: "Födelsedagar firade",
+    weekendsLived: "Helger levt",
+  },
+  es: {
+    title: "🎉 Estadísticas y cuenta atrás de cumpleaños 🎉",
+    birthdayLabel: "Selecciona tu cumpleaños:",
+    showStatsButton: "Mostrar mis estadísticas",
+    timeUntilNextBirthday: "Tiempo hasta tu cumpleaños: ",
+    age: "Edad",
+    monthsLived: "Meses vividos",
+    weeksLived: "Semanas vividas",
+    daysLived: "Días vividos",
+    hoursLived: "Horas vividas",
+    minutesLived: "Minutos vividos",
+    secondsLived: "Segundos vividos",
+    leapYears: "Años bisiestos",
+    birthdaysCelebrated: "Cumpleaños celebrados",
+    weekendsLived: "Fines de semana vividos",
+  },
 };
 
-// Current language setting
-let currentLanguage = 'en'; // Default to English
+let currentLanguage = "en";
 
-// Function to update language
 function changeLanguage() {
-    currentLanguage = document.getElementById('language-selector').value;
-    updateTextContent();
-    saveLanguageToLocalStorage();
+  currentLanguage = document.getElementById("language-select").value;
+  updateText();
 }
 
-// Update the text content based on the selected language
-function updateTextContent() {
-    const textContent = translations[currentLanguage];
-    
-    document.getElementById('header-text').innerText = textContent.headerText;
-    document.getElementById('select-birthday-label').innerText = textContent.selectBirthdayLabel;
-    document.getElementById('show-stats-btn').innerText = textContent.showStatsBtn;
-    document.getElementById('share-button').innerText = textContent.shareButton;
-    // Other dynamic text content update can go here
+function updateText() {
+  document.getElementById("page-title").innerText = translations[currentLanguage].title;
+  document.getElementById("birthday-label").innerText = translations[currentLanguage].birthdayLabel;
+  document.getElementById("show-stats-button").innerText = translations[currentLanguage].showStatsButton;
 }
 
-// Load birthday from localStorage (if already stored)
-function loadBirthdayFromLocalStorage() {
-    const storedBirthday = localStorage.getItem('birthday');
-    if (storedBirthday) {
-        document.getElementById('birthday').value = storedBirthday;
-        showStats();
-    }
-}
-
-// Save birthday to localStorage
-function saveBirthdayToLocalStorage() {
-    const birthdayInput = document.getElementById('birthday').value;
-    if (birthdayInput) {
-        localStorage.setItem('birthday', birthdayInput);
-    }
-}
-
-// Show Stats when birthday is entered
 function showStats() {
-    saveBirthdayToLocalStorage();
-    const statsDiv = document.getElementById("stats");
-    const today = new Date();
-    const birthDate = new Date(document.getElementById('birthday').value);
+  const bdayInput = document.getElementById("birthday").value;
+  if (!bdayInput) {
+    alert("Please select your birthday!");
+    return;
+  }
 
-    const ageInMilliseconds = today - birthDate;
-    const ageInSeconds = ageInMilliseconds / 1000;
-    const ageInMinutes = ageInSeconds / 60;
-    const ageInHours = ageInMinutes / 60;
-    const ageInDays = ageInHours / 24;
-    const ageInMonths = ageInDays / 30.4375; // Average days in a month
-    const ageInYears = ageInDays / 365.25; // Average days in a year
+  document.getElementById("birthday-input").style.display = "none";
 
-    statsDiv.innerHTML = `
-        <p><strong>${translations[currentLanguage].timeUntilBirthdayText}:</strong> ${Math.floor(ageInYears)} years</p>
-        <p><strong>${translations[currentLanguage].monthsLived}:</strong> ${Math.floor(ageInMonths)} months</p>
-        <p><strong>${translations[currentLanguage].daysLived}:</strong> ${Math.floor(ageInDays)} days</p>
-        <p><strong>${translations[currentLanguage].hoursLived}:</strong> ${Math.floor(ageInHours)} hours</p>
-    `;
-    updateCountdown();
+  const birthDate = new Date(bdayInput);
+  const today = new Date();
+
+  const ageInMilliseconds = today - birthDate;
+  const ageInSeconds = ageInMilliseconds / 1000;
+  const ageInMinutes = ageInSeconds / 60;
+  const ageInHours = ageInMinutes / 60;
+  const ageInDays = ageInHours / 24;
+  const ageInMonths = ageInDays / 30.4375;
+  const ageInYears = ageInDays / 365.25;
+
+  const leapYears = countLeapYears(birthDate, today);
+  const weekendsLived = Math.floor(ageInDays / 7 * 2);
+
+  updateStats(ageInYears, ageInMonths, ageInDays, ageInHours, ageInMinutes, ageInSeconds, leapYears, weekendsLived);
+
+  updateCountdown(birthDate, today);
 }
 
-// Update the countdown
-function updateCountdown() {
-    const countdownDiv = document.getElementById("countdown");
-    const today = new Date();
-    const birthDate = new Date(document.getElementById('birthday').value);
-    birthDate.setFullYear(today.getFullYear());
+function updateStats(ageInYears, ageInMonths, ageInDays, ageInHours, ageInMinutes, ageInSeconds, leapYears, weekendsLived) {
+  document.getElementById("stats").innerHTML = `
+    <p><strong>${translations[currentLanguage].age}:</strong> ${Math.floor(ageInYears)} years</p>
+    <p><strong>${translations[currentLanguage].monthsLived}:</strong> ${Math.floor(ageInMonths)} months</p>
+    <p><strong>${translations[currentLanguage].weeksLived}:</strong> ${Math.floor(ageInDays / 7)} weeks</p>
+    <p><strong>${translations[currentLanguage].daysLived}:</strong> ${Math.floor(ageInDays)} days</p>
+    <p><strong>${translations[currentLanguage].hoursLived}:</strong> ${Math.floor(ageInHours)} hours</p>
+    <p><strong>${translations[currentLanguage].minutesLived}:</strong> ${Math.floor(ageInMinutes)} minutes</p>
+    <p><strong>${translations[currentLanguage].secondsLived}:</strong> ${Math.floor(ageInSeconds)} seconds</p>
+    <p><strong>${translations[currentLanguage].leapYears}:</strong> ${leapYears}</p>
+    <p><strong>${translations[currentLanguage].birthdaysCelebrated}:</strong> ${Math.floor(ageInYears)}</p>
+    <p><strong>${translations[currentLanguage].weekendsLived}:</strong> ${weekendsLived}</p>
+  `;
+}
 
-    if (today > birthDate) {
-        birthDate.setFullYear(today.getFullYear() + 1);
+function countLeapYears(startDate, endDate) {
+  let leapYears = 0;
+  for (let year = startDate.getFullYear(); year <= endDate.getFullYear(); year++) {
+    if (isLeapYear(year)) {
+      leapYears++;
     }
+  }
+  return leapYears;
+}
 
-    const timeDiff = birthDate - today;
+function isLeapYear(year) {
+  return (year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0));
+}
+
+function updateCountdown(birthDate, today) {
+  clearInterval(countdownInterval);
+
+  countdownInterval = setInterval(() => {
+    const nextBirthday = getNextBirthday(birthDate, today);
+    const timeDiff = nextBirthday - today;
     const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
     const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
 
-    countdownDiv.innerHTML = `
-        <p>${translations[currentLanguage].timeUntilBirthdayText}: ${days}d ${hours}h ${minutes}m ${seconds}s</p>
-    `;
+    document.getElementById("countdown").innerText = `${translations[currentLanguage].timeUntilNextBirthday} ${days}d ${hours}h ${minutes}m ${seconds}s`;
+  }, 1000);
 }
 
-// Confetti Explosion
-function explodeConfetti() {
-    const confetti = canvasConfetti.create(document.getElementById('confetti'), {
-        resize: true,
-        useWorker: true
-    });
-
-    confetti({
-        particleCount: 200,
-        spread: 70,
-        origin: { x: 0.5, y: 0.5 }
-    });
+function getNextBirthday(birthDate, today) {
+  let nextBirthday = new Date(birthDate);
+  nextBirthday.setFullYear(today.getFullYear());
+  if (nextBirthday <= today) {
+    nextBirthday.setFullYear(today.getFullYear() + 1);
+  }
+  return nextBirthday;
 }
 
-// Share birthday page
-function shareBirthdayPage() {
-    const url = window.location.href;
+// Function to share the page
+function sharePage() {
+  if (navigator.share) {
     navigator.share({
-        title: 'Check out my Birthday Stats & Countdown!',
-        url: url
-    });
+      title: document.title,
+      url: window.location.href
+    }).catch(console.error);
+  } else {
+    alert("Share not supported on this browser.");
+  }
 }
 
-// Initialize the page with stored language
-function loadLanguageFromLocalStorage() {
-    const storedLanguage = localStorage.getItem('language');
-    if (storedLanguage) {
-        currentLanguage = storedLanguage;
-        document.getElementById('language-selector').value = currentLanguage;
-        updateTextContent();
-    }
-}
-
-function saveLanguageToLocalStorage() {
-    localStorage.setItem('language', currentLanguage);
-}
-
-// Load language settings when the page loads
-loadLanguageFromLocalStorage();
+updateText();

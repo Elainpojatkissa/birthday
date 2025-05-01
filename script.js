@@ -99,7 +99,23 @@ function showStats() {
   const birthDate = new Date(bdayInput);
   const today = new Date();
 
-  // Lasketaan aikarajat
+  // Calculate age values
+  updateAgeValues(birthDate, today);
+
+  const leapYears = countLeapYears(birthDate, today);
+  const weekendsLived = Math.floor(ageInDays / 7 * 2);
+
+  updateStats(leapYears, weekendsLived);
+  updateCountdown(birthDate, today);
+  
+  // Update stats every second
+  statsInterval = setInterval(function() {
+    updateAgeValues(birthDate, new Date());  // Update age values in real-time
+    updateStats(leapYears, weekendsLived);
+  }, 1000);
+}
+
+function updateAgeValues(birthDate, today) {
   const ageInMilliseconds = today - birthDate;
   ageInSeconds = ageInMilliseconds / 1000;
   ageInMinutes = ageInSeconds / 60;
@@ -107,26 +123,9 @@ function showStats() {
   ageInDays = ageInHours / 24;
   ageInMonths = ageInDays / 30.4375;
   ageInYears = ageInDays / 365.25;
-
-  const leapYears = countLeapYears(birthDate, today);
-  const weekendsLived = Math.floor(ageInDays / 7 * 2);
-
-  updateStats(ageInYears, ageInMonths, ageInDays, ageInHours, ageInMinutes, ageInSeconds, leapYears, weekendsLived);
-  updateCountdown(birthDate, today);
-  
-  // Päivitä tilastoja joka sekunti
-  statsInterval = setInterval(function() {
-    ageInSeconds++;
-    ageInMinutes++;
-    ageInHours++;
-    ageInDays++;
-    ageInMonths++;
-    ageInYears++;
-    updateStats(ageInYears, ageInMonths, ageInDays, ageInHours, ageInMinutes, ageInSeconds, leapYears, weekendsLived);
-  }, 1000);
 }
 
-function updateStats(ageInYears, ageInMonths, ageInDays, ageInHours, ageInMinutes, ageInSeconds, leapYears, weekendsLived) {
+function updateStats(leapYears, weekendsLived) {
   document.getElementById("stats").innerHTML = `
     <p><strong>${translations[currentLanguage].age}:</strong> ${Math.floor(ageInYears)} years</p>
     <p><strong>${translations[currentLanguage].monthsLived}:</strong> ${Math.floor(ageInMonths)} months</p>

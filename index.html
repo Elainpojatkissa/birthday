@@ -1,40 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Birthday Stats & Countdown</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Birthday Stats & Countdown</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1 id="header-text">🎉 Birthday Stats & Countdown 🎉</h1>
 
-        <!-- Language Selection -->
-        <select id="language-selector" onchange="changeLanguage()">
-            <option value="en">English</option>
-            <option value="es">Spanish</option>
-            <option value="sv">Swedish</option>
-            <option value="fi">Finnish</option>
-        </select>
-        
-        <label for="birthday" id="select-birthday-label">Select your birthday:</label>
-        <input type="date" id="birthday" max="9999-12-31">
-        <button onclick="showStats()" id="show-stats-btn">Show Stats</button>
-        
-        <div id="stats"></div>
-        <div id="countdown"></div>
-        <div id="birthday-message"></div>
-        <div id="confetti"></div>
-        
-        <div id="history-events"></div>
-        <div id="birthday-quiz"></div>
-        <div id="zodiac-info"></div>
-        
-        <button id="share-button" onclick="shareBirthdayPage()">Share Your Birthday Stats</button>
+  <div class="container">
+    <h1 id="page-title">🎉 Birthday Stats & Countdown 🎉</h1>
+
+    <div class="language-selector">
+      <label for="language-select" id="language-label">Select language:</label>
+      <select id="language-select" onchange="changeLanguage()">
+        <option value="en">English</option>
+        <option value="fi">Finnish (Suomi)</option>
+        <option value="es">Spanish (España)</option>
+        <option value="sv">Swedish (Sverige)</option>
+      </select>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti"></script>
-    <script src="script.js"></script>
+    <div id="birthday-input">
+      <label for="birthday">Select your birthday:</label>
+      <input type="date" id="birthday" max="9999-12-31">
+      <button onclick="showStats()" id="show-stats-button">Show My Stats</button>
+    </div>
+
+    <div id="stats"></div>
+    <div id="countdown"></div>
+    <div id="birthday-message"></div>
+
+    <div id="games">
+      <button onclick="startCakeDecoratingGame()">Cake Decorating Game</button>
+      <button onclick="startCandleBlowingGame()">Candle Blowing Game</button>
+    </div>
+
+    <div id="confetti"></div>
+
+    <div id="share-button">
+      <button onclick="sharePage()">Share</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
 </body>
 </html>

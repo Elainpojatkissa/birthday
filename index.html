@@ -1,30 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Birthday Stats & Countdown</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Stats & Countdown</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <div class="container">
+        <h1 id="header-text">🎉 Birthday Stats & Countdown 🎉</h1>
 
-<div class="container">
-  <h1>🎉 Birthday Stats & Countdown 🎉</h1>
+        <!-- Language Selection -->
+        <select id="language-selector" onchange="changeLanguage()">
+            <option value="en">English</option>
+            <option value="es">Spanish</option>
+            <option value="sv">Swedish</option>
+            <option value="fi">Finnish</option>
+        </select>
+        
+        <label for="birthday" id="select-birthday-label">Select your birthday:</label>
+        <input type="date" id="birthday" max="9999-12-31">
+        <button onclick="showStats()" id="show-stats-btn">Show Stats</button>
+        
+        <div id="stats"></div>
+        <div id="countdown"></div>
+        <div id="birthday-message"></div>
+        <div id="confetti"></div>
+        
+        <div id="history-events"></div>
+        <div id="birthday-quiz"></div>
+        <div id="zodiac-info"></div>
+        
+        <button id="share-button" onclick="shareBirthdayPage()">Share Your Birthday Stats</button>
+    </div>
 
-  <div id="input-container">
-    <label for="birthday" id="birthday-label">Select your birthday:</label>
-    <input type="date" id="birthday" max="9999-12-31">
-    <button onclick="showStats()" id="show-stats-button">Show My Stats</button>
-  </div>
-
-  <div class="stats" id="stats"></div>
-
-  <!-- Added a header for the countdown -->
-  <div class="countdown-header" id="countdown-header">Time until your birthday</div>
-  <div id="countdown"></div>
-</div>
-
-<script src="script.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti"></script>
+    <script src="script.js"></script>
 </body>
 </html>

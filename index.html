@@ -1,33 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Birthday Countdown</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Countdown</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div id="settings">
-    <label for="language">🌐 Language:</label>
-    <select id="language">
-      <option value="en">English</option>
-      <option value="fi">Finnish</option>
-      <option value="sv">Swedish</option>
-      <option value="es">Spanish</option>
-    </select><br />
-    <label for="birthday">🎂 Enter your birthday:</label>
-    <input type="date" id="birthday" /><br />
-    <label for="colorPicker">🎨 Pick a color:</label>
-    <input type="color" id="colorPicker" value="#ADD8E6" /><br />
-    <button id="saveBtn">Show Time</button>
-  </div>
+    <div id="language-selection">
+        <select id="language">
+            <option value="en">English</option>
+            <option value="fi">Finnish</option>
+            <option value="sv">Swedish</option>
+            <option value="es">Spanish</option>
+        </select>
+        <button id="set-language">Set Language</button>
+    </div>
 
-  <h1 id="countdown"></h1>
-  <button id="resetBtn" style="display:none">Reset Birthday</button>
+    <div id="birthday-settings">
+        <label for="birthday">Enter your birthday:</label>
+        <input type="date" id="birthday" />
+        <button id="show-time">Show Time</button>
+    </div>
 
-  <audio id="birthdaySound" src="birthday.mp3" preload="auto"></audio>
-  <canvas id="confetti-canvas"></canvas>
+    <div id="countdown-container" style="display:none;">
+        <h2 id="countdown"></h2>
+        <button id="reset-birthday">Reset Birthday</button>
+    </div>
 
-  <script src="script.js"></script>
+    <div id="confetti"></div>
+
+    <script src="script.js"></script>
 </body>
 </html>

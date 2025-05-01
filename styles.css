@@ -1,34 +1,32 @@
 body {
-  font-family: Arial, sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: lightblue;
-  margin: 0;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 20px;
 }
 
-.countdown-container {
-  text-align: center;
+#language-selection {
+    margin-bottom: 20px;
 }
 
-#countdown {
-  font-size: 2em;
-  margin: 20px;
+#birthday-settings {
+    margin-bottom: 20px;
 }
 
-#shareButton {
-  padding: 10px 20px;
-  font-size: 1em;
-  cursor: pointer;
-  background-color: #007BFF;
-  color: white;
-  border: none;
-  border-radius: 5px;
+#countdown-container {
+    margin-top: 20px;
 }
 
-#colorPicker {
-  margin-top: 20px;
-  padding: 5px;
-  font-size: 1em;
+button {
+    margin: 10px;
+}
+
+#confetti {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('confetti.gif') no-repeat center center;
+    display: none;
+    z-index: 999;
 }
